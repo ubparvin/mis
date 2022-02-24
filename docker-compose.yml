@@ -4,11 +4,12 @@ services:
     frontend:
         build:
             dockerfile: Dockerfile
-            context: ./frontend
+            context: ./mis-web
         ports:
-            - '3000:80'
+            - '80:80'
         environment:
             REACT_APP_GRAPHQL_SERVER_URL: http://localhost:4000/graphql
+            REACT_APP_SECRET: d8514926303a6e6fe7303770b06e7083
         volumes:
             - 'cra:/usr/share/nginx/html'
         networks:
@@ -17,13 +18,13 @@ services:
             - mysql
     backend:
         build:
-            context: ./backend
+            context: ./mis-graphql-server
             dockerfile: Dockerfile
         ports:
             - '4000:4000'
         environment:
             APP_SECRET: d8514926303a6e6fe7303770b06e7083
-            DB_HOST: localhost
+            DB_HOST: mysql
             DB_NAME: misdb
             DB_USERNAME: sysadmin
             DB_PASSWORD: u4=LKc@!k8Mj6WK9
@@ -36,7 +37,7 @@ services:
         depends_on:
             - mysql
     mysql:
-        image: 'mysql:8.0'
+        image: 'mysql:8'
         ports:
             - '3306:3306'
         environment:
